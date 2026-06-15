@@ -1,0 +1,743 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>皮皮与帆帆的恋爱手账 💙</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="恋爱手账">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#7CB4E8;--plight:#B3D9F2;--plitter:#DBEAFE;--pdark:#3B82F6;--pipi:#F97316;--fan:#3B82F6;--bg:rgba(245,250,255,0.88);--card:rgba(245,250,255,0.92);--text:#2C3E50;--tlight:#6B7C93;--tmuted:#A0B4C8}
+body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--plitter);color:var(--text);min-height:100vh;line-height:1.6}
+#app{min-height:100vh;display:flex;flex-direction:column}
+.page{flex:1;padding:24px 16px 80px;max-width:720px;margin:0 auto;width:100%;background:var(--bg);border-radius:16px;margin-top:16px;margin-bottom:16px}
+.page-wide{max-width:900px}
+.centered{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px 16px}
+.card{background:var(--card);border-radius:16px;padding:20px 24px;margin-bottom:14px;box-shadow:0 2px 12px rgba(59,130,246,0.08);border:1px solid rgba(147,197,253,0.15)}
+.card:hover{box-shadow:0 4px 20px rgba(59,130,246,0.12)}
+h1{font-size:1.75rem;font-weight:700;margin-bottom:8px}
+h2{font-size:1.35rem;font-weight:600;margin-bottom:6px}
+h3{font-size:1.1rem;font-weight:600;margin-bottom:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 24px;border:none;border-radius:999px;font-size:1rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s;text-decoration:none}
+.btn-p{background:linear-gradient(135deg,var(--primary),var(--pdark));color:#fff;box-shadow:0 4px 14px rgba(59,130,246,0.25)}
+.btn-p:hover{box-shadow:0 6px 20px rgba(59,130,246,0.35);transform:translateY(-1px)}
+.btn-s{background:var(--bg);color:var(--pdark);border:1.5px solid var(--plitter)}
+.btn-s:hover{background:var(--plitter)}
+.btn-block{width:100%}
+.btn-sm{padding:8px 18px;font-size:.875rem}
+.btn-pipi{background:linear-gradient(135deg,var(--pipi),#EA580C);color:#fff}
+.btn-active{background:var(--plitter)!important;color:var(--pdark)!important;font-weight:600!important}
+.navbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.88);backdrop-filter:blur(12px);border-bottom:1px solid rgba(147,197,253,0.2);padding:0 16px}
+.nav-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:4px;height:56px}
+.nav-brand{font-weight:700;font-size:1rem;margin-right:auto;white-space:nowrap;color:var(--text);text-decoration:none}
+.nav-link{display:flex;align-items:center;gap:4px;padding:8px 12px;border-radius:999px;color:var(--tlight);font-size:.85rem;font-weight:500;transition:all .2s;text-decoration:none;white-space:nowrap;cursor:pointer}
+.nav-link:hover,.nav-link.active{background:var(--plitter);color:var(--pdark);font-weight:600}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:.9rem;font-weight:600;margin-bottom:6px}
+.form-input{width:100%;padding:12px 16px;border:1.5px solid var(--plitter);border-radius:10px;font-size:1rem;font-family:inherit;background:#fff;transition:border-color .2s;color:var(--text)}
+.form-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(124,180,232,0.15)}
+textarea.form-input{resize:vertical;min-height:100px;line-height:1.6}
+.countdown-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px}
+.countdown-card{text-align:center;padding:20px 12px}
+.countdown-num{font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--pdark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2}
+.countdown-label{font-size:.85rem;color:var(--tlight);margin-top:4px}
+.reminder{background:linear-gradient(135deg,var(--plitter),#E0F2FE);border:1px solid rgba(96,165,250,0.3);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-weight:500;font-size:.95rem}
+.reminder-special{background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-color:rgba(251,191,36,0.4);font-size:1.05rem}
+.welcome{text-align:center;padding:28px 0 20px}
+.welcome h1{font-size:2rem;background:linear-gradient(135deg,var(--pdark),#1D4ED8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.identity-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.identity-card{border:2px solid var(--plitter);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:#fff}
+.identity-card:hover{border-color:var(--plight)}
+.identity-card.selected{border-color:var(--primary);background:var(--plitter)}
+.identity-emoji{font-size:2.5rem;margin-bottom:8px}
+.empty-state{text-align:center;padding:40px 20px;color:var(--tmuted)}
+.error{background:#FEF2F2;border:1px solid #FECACA;color:#B91C1C;padding:10px 14px;border-radius:10px;margin-bottom:12px;font-size:.9rem}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.page-header h1{margin-bottom:0}
+.divider{border:none;height:1px;background:linear-gradient(to right,transparent,var(--plitter),transparent);margin:20px 0}
+.setup-step{text-align:center;padding:8px 0}
+.setup-dots{display:flex;justify-content:center;gap:8px;margin-bottom:28px}
+.setup-dot{width:10px;height:10px;border-radius:50%;background:var(--plitter);transition:all .3s}
+.setup-dot.active{background:var(--primary);width:28px;border-radius:5px}
+.setup-dot.done{background:var(--pdark)}
+.timeline{position:relative;padding-left:36px}
+.timeline::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--plight),var(--plitter))}
+.timeline-item{position:relative;margin-bottom:24px}
+.timeline-dot{position:absolute;left:-28px;top:6px;width:14px;height:14px;border-radius:50%;border:3px solid var(--bg);z-index:1}
+.timeline-dot.pipi{background:var(--pipi)}
+.timeline-dot.fan{background:var(--fan)}
+.timeline-name{font-weight:600;font-size:.9rem}
+.timeline-name.pipi{color:var(--pipi)}
+.timeline-name.fan{color:var(--fan)}
+.timeline-date{font-size:.8rem;color:var(--tmuted)}
+.timeline-content{background:var(--card);border-radius:10px;padding:14px 16px;border:1px solid rgba(147,197,253,0.12)}
+.timeline-text{margin-bottom:8px;line-height:1.7}
+.timeline-text-label{font-size:.8rem;font-weight:600;color:var(--tmuted);margin-bottom:2px}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--pdark);color:#fff;padding:12px 24px;border-radius:999px;font-size:.9rem;font-weight:500;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.15);animation:ti .3s ease}
+@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.hidden{display:none!important}
+@media(max-width:480px){.page{padding:16px 12px 72px}h1{font-size:1.4rem}.countdown-grid{grid-template-columns:1fr 1fr}.nav-link{padding:6px 8px;font-size:.78rem}.identity-grid{grid-template-columns:1fr}}
+@media(max-width:360px){.countdown-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ========================================
+// 皮皮与帆帆的恋爱手账 v2 — 纯原生 JS
+// ========================================
+
+const $ = id => document.getElementById(id);
+const _ = q => document.querySelector(q);
+const __ = q => document.querySelectorAll(q);
+const h = (tag, attr, ...kids) => {
+  const el = document.createElement(tag);
+  if (attr) Object.entries(attr).forEach(([k,v]) => {
+    if (k === 'className') el.className = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2).toLowerCase(), v);
+    else if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
+    else if (k === 'html') el.innerHTML = v;
+    else if (k === 'rows' || k === 'cols') el.setAttribute(k, v);
+    else el.setAttribute(k, v);
+  });
+  if (kids) (Array.isArray(kids) ? kids : [kids]).forEach(c => { if (c != null) el.append(typeof c === 'string' ? document.createTextNode(c) : c); });
+  return el;
+};
+
+// ============ Storage ============
+const LS = {
+  get(k) { try { return JSON.parse(localStorage.getItem('pf_' + k)); } catch { return null; } },
+  set(k, v) { localStorage.setItem('pf_' + k, JSON.stringify(v)); },
+  del(k) { localStorage.removeItem('pf_' + k); }
+};
+
+// ============ Date Utils ============
+function today() { const d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function fmt(d) { if (!d) return ''; const x = new Date(d); return x.getFullYear()+'年'+(x.getMonth()+1)+'月'+x.getDate()+'日'; }
+function daysUntil(bd) {
+  if (!bd) return null;
+  const t = new Date(); t.setHours(0,0,0,0);
+  const b = new Date(bd); b.setHours(0,0,0,0);
+  let y = new Date(t.getFullYear(), b.getMonth(), b.getDate());
+  if (y < t) y = new Date(t.getFullYear()+1, b.getMonth(), b.getDate());
+  return Math.ceil((y-t)/(86400000));
+}
+function daysSince(d) { return Math.round((new Date()-new Date(d))/86400000); }
+function isBD(bd) { if (!bd) return false; const b = new Date(bd), t = new Date(); return b.getMonth()===t.getMonth() && b.getDate()===t.getDate(); }
+function toast(msg) {
+  const o = document.querySelector('.toast'); if (o) o.remove();
+  const e = h('div', {className:'toast'}, msg);
+  document.body.appendChild(e);
+  setTimeout(() => { e.style.opacity='0'; e.style.transition='opacity 0.3s'; setTimeout(()=>e.remove(), 300); }, 2500);
+}
+
+// ============ App State ============
+const APP = {
+  page: 'setup',
+  user: null, // { name, email }
+  settings: null,
+  _listeners: [],
+  on(cb) { this._listeners.push(cb); },
+  notify() { this._listeners.forEach(f => f()); },
+  init() {
+    this.user = LS.get('user');
+    this.settings = LS.get('settings');
+    this.page = this.user ? (LS.get('lastPage') || 'dashboard') : (this.settings ? 'login' : 'setup');
+  },
+  login(name, email) {
+    this.user = { name, email };
+    LS.set('user', this.user);
+    this.page = 'dashboard';
+    LS.set('lastPage', 'dashboard');
+    this.notify();
+  },
+  logout() {
+    this.user = null;
+    LS.del('user');
+    LS.del('lastPage');
+    this.page = 'login';
+    this.notify();
+  },
+  saveSettings(s) {
+    this.settings = s;
+    LS.set('settings', s);
+  },
+  navigate(p) {
+    this.page = p;
+    LS.set('lastPage', p);
+    this.notify();
+  }
+};
+
+APP.init();
+
+// ============ DB ============
+const DB = {
+  getSettings() { return APP.settings; },
+  saveSettings(s) { APP.saveSettings(s); LS.set('settings', s); },
+  getProfiles() { return LS.get('profiles') || []; },
+  saveProfile(p) { const ps = this.getProfiles(); const i = ps.findIndex(x => x.name === p.name); if (i>=0) ps[i]=p; else ps.push(p); LS.set('profiles', ps); },
+  getRecords() { return LS.get('records') || []; },
+  saveRecord(r) {
+    const rs = this.getRecords();
+    const i = rs.findIndex(x => x.user === r.user && x.date === r.date);
+    if (i>=0) rs[i] = r; else rs.push(r);
+    LS.set('records', rs);
+  },
+  getPartnerName() { return APP.user?.name === '皮皮' ? '帆帆' : '皮皮'; }
+};
+
+// ============ Pages ============
+
+function Navbar() {
+  if (!APP.user) return '';
+  const pages = ['dashboard','record','dates','timeline','calendar','feedback'];
+  const labels = {dashboard:'🏠首页', record:'💌记录', dates:'📅日期', timeline:'📖时光', calendar:'📆日历', feedback:'🗣改进'};
+  return h('nav', {className:'navbar'},
+    h('div', {className:'nav-inner'},
+      h('span', {className:'nav-brand'}, '💙 恋爱手账'),
+      pages.map(p => h('span', {
+        className:'nav-link' + (APP.page===p?' active':''),
+        onClick: () => APP.navigate(p)
+      }, labels[p])),
+      h('span', {style:{fontSize:'0.8rem',color:'var(--tmuted)',marginLeft:'8px'}}, APP.user?.name || '')
+    )
+  );
+}
+
+function Reminder() {
+  const s = APP.settings;
+  if (!s) return '';
+  const msgs = []; let special = false;
+  if (s.pipi) {
+    if (isBD(s.pipi)) { msgs.push('🎂 今天是皮皮的生日！🎉'); special = true; }
+    else { const d = daysUntil(s.pipi); if (d <= 7) msgs.push('🎂 距离皮皮生日还有 ' + d + ' 天'); }
+  }
+  if (s.fanfan) {
+    if (isBD(s.fanfan)) { msgs.push('🎂 今天是帆帆的生日！🎉'); special = true; }
+    else { const d = daysUntil(s.fanfan); if (d <= 7) msgs.push('🎂 距离帆帆生日还有 ' + d + ' 天'); }
+  }
+  if (s.anni) {
+    if (isBD(s.anni)) { msgs.push('💙 纪念日快乐！🎉'); special = true; }
+    else { const d = daysUntil(s.anni); if (d <= 7) msgs.push('💙 距离纪念日还有 ' + d + ' 天'); }
+  }
+  if (!msgs.length) return '';
+  return h('div', {className:'reminder' + (special?' reminder-special':'')}, msgs.join(' · '));
+}
+
+function CountdownCard(emoji, label, days, sub) {
+  return h('div', {className:'card countdown-card'},
+    h('div', {style:{fontSize:'1.8rem',marginBottom:'4px'}}, emoji),
+    h('div', {className:'countdown-num'}, days != null ? String(days) : '--'),
+    h('div', {className:'countdown-label'}, label),
+    sub ? h('div', {style:{fontSize:'0.75rem',color:'var(--tmuted)',marginTop:'2px'}}, sub) : null
+  );
+}
+
+// ---- Setup Page ----
+function SetupPage() {
+  let step = 1;
+  const data = { pipi: '', fanfan: '', anni: '' };
+  function render() {
+    const err = document.getElementById('setup-err');
+    if (err) err.innerHTML = '';
+    const content = document.getElementById('page-content');
+    if (!content) return;
+    content.innerHTML = '';
+    content.append(h('div', {className:'centered'},
+      h('div', {style:{width:'100%',maxWidth:'400px',background:'var(--card)',borderRadius:'16px',padding:'32px 28px',boxShadow:'0 8px 32px rgba(59,130,246,0.12)'}},
+        h('div', {style:{textAlign:'center',marginBottom:'24px'}}, h('h1', null, '💙 欢迎来到恋爱手账'), h('p', {style:{color:'var(--tlight)',fontSize:'0.9rem',marginTop:'4px'}}, '先来设置你们的专属信息吧')),
+        h('div', {className:'setup-dots'}, [1,2,3,4].map(d => h('div', {className:'setup-dot' + (d===step?' active':'') + (d<step?' done':'')}))),
+        h('div', {id:'setup-err', style:{display:(step===4?'none':'block')}}),
+        step === 1 ? h('div', {className:'setup-step'}, h('h2', null, '✨ 皮皮的生日是哪天？'), h('p', {style:{color:'var(--tlight)',marginBottom:'20px',fontSize:'0.9rem'}}, '输入皮皮的出生日期'), h('input', {className:'form-input',type:'date',id:'inp-pipi',style:{maxWidth:'200px',margin:'0 auto',textAlign:'center',display:'block'},value:data.pipi,onChange:e=>{data.pipi=e.target.value}})) : null,
+        step === 2 ? h('div', {className:'setup-step'}, h('h2', null, '✨ 帆帆的生日是哪天？'), h('p', {style:{color:'var(--tlight)',marginBottom:'20px',fontSize:'0.9rem'}}, '输入帆帆的出生日期'), h('input', {className:'form-input',type:'date',id:'inp-fan',style:{maxWidth:'200px',margin:'0 auto',textAlign:'center',display:'block'},value:data.fanfan,onChange:e=>{data.fanfan=e.target.value}})) : null,
+        step === 3 ? h('div', {className:'setup-step'}, h('h2', null, '💙 你们的恋爱纪念日？'), h('p', {style:{color:'var(--tlight)',marginBottom:'20px',fontSize:'0.9rem'}}, '从这一天开始，你们的故事启程了'), h('input', {className:'form-input',type:'date',id:'inp-anni',style:{maxWidth:'200px',margin:'0 auto',textAlign:'center',display:'block'},value:data.anni,onChange:e=>{data.anni=e.target.value}})) : null,
+        step === 4 ? h('div', {className:'setup-step'}, h('h2', null, '💕 确认一下信息'), h('div', {style:{background:'var(--plitter)',borderRadius:'10px',padding:'16px',marginTop:'16px',textAlign:'left',lineHeight:'2'}}, h('div', null, '🎂 皮皮生日：', h('strong', null, fmt(data.pipi))), h('div', null, '🎂 帆帆生日：', h('strong', null, fmt(data.fanfan))), h('div', null, '💙 纪念日：', h('strong', null, fmt(data.anni)))), h('p', {style:{marginTop:'16px',fontSize:'0.9rem',color:'var(--tlight)'}}, '确认后就可以开始记录了 ✨')) : null,
+        h('div', {style:{display:'flex',gap:'12px',marginTop:'28px',justifyContent: step===1?'center':'space-between'}},
+          step > 1 ? h('button', {className:'btn btn-s',onClick:()=>{step--;render()}}, '← 上一步') : null,
+          step < 4 ? h('button', {className:'btn btn-p',onClick:()=>{
+            const e = document.getElementById('setup-err');
+            if (step===1 && !data.pipi) { e.innerHTML = '<div class=\"error\">请选择皮皮的生日</div>'; return; }
+            if (step===2 && !data.fanfan) { e.innerHTML = '<div class=\"error\">请选择帆帆的生日</div>'; return; }
+            if (step===3 && !data.anni) { e.innerHTML = '<div class=\"error\">请选择纪念日</div>'; return; }
+            step++; render();
+          }}, '下一步 →') : h('button', {className:'btn btn-p btn-block',onClick:()=>{
+            DB.saveSettings({pipi:data.pipi, fanfan:data.fanfan, anni:data.anni});
+            toast('🎉 设置完成！');
+            setTimeout(() => APP.navigate('login'), 800);
+          }}, '✅ 完成设置'),
+        ),
+      )
+    ));
+  }
+  return { render };
+}
+
+// ---- Login Page ----
+function LoginPage() {
+  let reg = false;
+  let identity = '';
+  function render() {
+    const content = document.getElementById('page-content');
+    if (!content) return;
+    content.innerHTML = '';
+    const box = h('div', {style:{width:'100%',maxWidth:'400px',background:'var(--card)',borderRadius:'16px',padding:'32px 28px',boxShadow:'0 8px 32px rgba(59,130,246,0.12)'}});
+    let errEl = null;
+    box.innerHTML = `
+      <div style="text-align:center;margin-bottom:24px">
+        <div style="font-size:2.5rem;margin-bottom:8px">💙</div>
+        <h1></h1>
+        <p style="color:var(--tlight);font-size:0.9rem;margin-top:4px"></p>
+      </div>
+      <div id="login-err"></div>
+    `;
+    if (reg) {
+      const grid = h('div', {className:'identity-grid'});
+      ['皮皮','帆帆'].forEach(n => {
+        grid.append(h('div', {className:'identity-card' + (n==='皮皮'?' pipi':' fan') + (identity===n?' selected':''), onClick:()=>{identity=n;render()}},
+          h('div', {className:'identity-emoji'}, n==='皮皮'?'🧡':'💙'),
+          h('div', null, n)
+        ));
+      });
+      box.append(h('div', {className:'form-group'}, h('div', {className:'form-label'}, '你是谁？'), grid));
+    }
+    const emailI = h('input', {className:'form-input',type:'email',placeholder:'请输入邮箱',id:'login-email',required:true});
+    const passI = h('input', {className:'form-input',type:'password',placeholder:'请输入密码',id:'login-pass',required:true});
+    box.append(
+      h('div', {className:'form-group'}, h('div', {className:'form-label'}, '邮箱'), emailI),
+      h('div', {className:'form-group'}, h('div', {className:'form-label'}, '密码'), passI),
+      h('button', {className:'btn btn-p btn-block',style:{marginTop:'8px'},onClick:()=>{
+        const e = document.getElementById('login-err');
+        const email = document.getElementById('login-email').value.trim();
+        const pass = document.getElementById('login-pass').value.trim();
+        if (!email || !pass) { e.innerHTML = '<div class=\"error\">请填写邮箱和密码</div>'; return; }
+        if (reg && !identity) { e.innerHTML = '<div class=\"error\">请选择你的身份（皮皮还是帆帆）</div>'; return; }
+        if (reg) {
+          const ps = DB.getProfiles();
+          if (ps.find(p => p.name === identity)) { e.innerHTML = '<div class=\"error\">「' + identity + '」已经注册过了</div>'; return; }
+          DB.saveProfile({name:identity, email});
+          APP.login(identity, email);
+        } else {
+          const ps = DB.getProfiles();
+          const p = ps.find(x => x.email === email);
+          if (!p) { e.innerHTML = '<div class=\"error\">邮箱未注册，请先注册</div>'; return; }
+          APP.login(p.name, email);
+        }
+      }}, reg ? '✨ 注册并开始记录' : '💙 登录'),
+      h('div', {style:{textAlign:'center',marginTop:'16px',fontSize:'0.9rem',color:'var(--tlight)'}},
+        reg ? '已有账号？' : '还没有账号？', ' ',
+        h('span', {style:{color:'var(--pdark)',fontWeight:600,cursor:'pointer'},onClick:()=>{reg=!reg;identity='';render()}}, reg ? '去登录' : '注册一个')
+      )
+    );
+    content.append(h('div', {className:'centered'}, box));
+  }
+  return { render };
+}
+
+// ---- Dashboard ----
+function DashboardPage() {
+  function render() {
+    const content = document.getElementById('page-content');
+    if (!content) return;
+    const s = APP.settings;
+    const pm = DB.getPartnerName();
+    const isP = APP.user?.name === '皮皮';
+    const allRecs = DB.getRecords();
+    const myRecs = allRecs.filter(r => r.user === APP.user?.name);
+    const partnerRecs = allRecs.filter(r => r.user === pm);
+    const todayDone = !!myRecs.find(r => r.date === today());
+    const pLatest = partnerRecs.length > 0 ? partnerRecs[0] : null;
+    content.innerHTML = '';
+    content.append(
+      h('div', {style:{textAlign:'center',padding:'28px 0 20px'}},
+        h('div', {style:{fontSize:'2.5rem',marginBottom:'8px'}}, isP ? '🧡' : '💙'),
+        h('h1', {style:{background:'linear-gradient(135deg,var(--pdark),#1D4ED8)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text'}}, '嗨，' + APP.user?.name + ' 💕'),
+        h('p', {style:{color:'var(--tlight)',fontSize:'1rem',marginTop:'4px'}}, '今天是 ' + fmt(new Date()) + '，和' + pm + '在一起的每一天都值得记录 ✨')
+      ),
+      Reminder(),
+      h('div', {className:'countdown-grid'},
+        s?.pipi ? CountdownCard('🧡', '距离皮皮生日', daysUntil(s.pipi), fmt(s.pipi)) : null,
+        s?.fanfan ? CountdownCard('💙', '距离帆帆生日', daysUntil(s.fanfan), fmt(s.fanfan)) : null,
+        s?.anni ? CountdownCard('💕', '在一起的第', daysSince(s.anni), '从 ' + fmt(s.anni) + ' 开始') : null,
+      ),
+      h('div', {className:'card',style:{textAlign:'center',padding:'28px 20px',cursor:'pointer'},onClick:()=>APP.navigate('record')},
+        h('div', {style:{fontSize:'2rem',marginBottom:'8px'}}, todayDone ? '💌' : '✍️'),
+        h('h3', null, todayDone ? '今天已经记录过了 💕' : '记录今天的心里话'),
+        h('p', {style:{color:'var(--tlight)',fontSize:'0.85rem',marginTop:'4px'}}, todayDone ? '点这里查看或修改' : '点击写下今天想对' + pm + '说的话')
+      ),
+      pLatest ? h('div', null,
+        h('h2', {style:{marginBottom:'10px'}}, '💬 ' + pm + '最近的心里话'),
+        h('div', {className:'card card-flat'},
+          h('div', {style:{fontSize:'0.8rem',color:'var(--tmuted)',marginBottom:'6px'}}, fmt(pLatest.date)),
+          pLatest.sweet ? h('div', null, h('div', {style:{fontSize:'0.8rem',fontWeight:600,color:'var(--tmuted)'}}, '🌸 暖心话'), h('p', {style:{marginTop:'2px'}}, pLatest.sweet)) : null,
+          pLatest.unsaid ? h('div', {style:{marginTop:'8px'}}, h('div', {style:{fontSize:'0.8rem',fontWeight:600,color:'var(--tmuted)'}}, '💭 心里话'), h('p', {style:{marginTop:'2px'}}, pLatest.unsaid)) : null,
+        )
+      ) : null,
+      myRecs.length > 0 ? h('div', {style:{marginTop:'16px'}},
+        h('h2', {style:{marginBottom:'10px'}}, '📝 我最近的记录'),
+        ...myRecs.slice(0,3).map(r => h('div', {className:'card',style:{marginBottom:'10px'}},
+          h('div', {style:{fontSize:'0.8rem',color:'var(--tmuted)',marginBottom:'4px'}}, fmt(r.date)),
+          r.sweet ? h('p', {style:{fontSize:'0.9rem'}}, '"' + r.sweet + '"') : null
+        ))
+      ) : null,
+      h('div', {style:{textAlign:'center',marginTop:'20px'}},
+        h('button', {className:'btn btn-sm btn-s',onClick:()=>{APP.logout();}}, '退出登录')
+      )
+    );
+  }
+  return { render };
+}
+
+// ---- Dates Page ----
+function DatesPage() {
+  function render() {
+    const content = document.getElementById('page-content');
+    if (!content) return;
+    const s = APP.settings;
+    let editing = false;
+    let form = {pipi:s?.pipi||'', fanfan:s?.fanfan||'', anni:s?.anni||''};
+    function dateCard(emoji, title, field, val, days, isToday, color) {
+      return h('div', {className:'card',style:{marginBottom:'14px',borderColor:isToday?color||'var(--primary)':undefined}},
+        h('div', {style:{display:'flex',alignItems:'center',gap:'16px',padding:'4px 0'}},
+          h('div', {style:{fontSize:'2rem'}}, isToday?'🎉':emoji),
+          h('div', {style:{flex:1}},
+            h('h3', {style:{marginBottom:'2px'}}, title),
+            val ? (editing ? h('input', {className:'form-input',type:'date',value:form[field],onChange:e=>{form[field]=e.target.value;render()},style:{marginTop:'6px'}})
+              : h('div', null, h('div', {style:{color:'var(--tlight)',fontSize:'0.9rem'}}, fmt(val)), isToday ? h('div', {style:{fontSize:'1.2rem',fontWeight:700,color:color||'var(--pdark)'}}, '🎂 就是今天！') : h('div', {style:{fontSize:'1.2rem',fontWeight:700,color:'var(--pdark)'}}, days != null ? (field==='anni' ? '已在一起 ' + days + ' 天' : '还有 ' + days + ' 天') : ''))
+            ) : h('div', {style:{color:'var(--tlight)',fontSize:'0.9rem'}}, '未设置'),
+          ),
+        ),
+      );
+    }
+    function reRender() {
+      const c = document.getElementById('page-content');
+      if (!c) return;
+      c.innerHTML = '';
+      c.append(
+        h('div', {className:'page-header'},
+          h('h1', null, '📅 重要日期'),
+          h('button', {className:'btn btn-sm ' + (editing?'btn-p':'btn-s'),onClick:()=>{editing=!editing;reRender()}}, editing ? '取消' : '编辑')
+        ),
+        dateCard('🧡', '皮皮生日', 'pipi', s?.pipi, daysUntil(s?.pipi), isBD(s?.pipi), 'var(--pipi)'),
+        dateCard('💙', '帆帆生日', 'fanfan', s?.fanfan, daysUntil(s?.fanfan), isBD(s?.fanfan), 'var(--fan)'),
+        dateCard('💕', '恋爱纪念日', 'anni', s?.anni, daysSince(s?.anni), isBD(s?.anni)),
+        editing ? h('button', {className:'btn btn-p btn-block',style:{marginTop:'8px'},onClick:()=>{
+          DB.saveSettings({pipi:form.pipi, fanfan:form.fanfan, anni:form.anni});
+          toast('✅ 日期已更新');
+          editing=false; reRender();
+        }}, '💾 保存更改') : null
+      );
+    }
+    reRender();
+  }
+  return { render };
+}
+
+// ---- Record Page ----
+function RecordPage() {
+  function render() {
+    const content = document.getElementById('page-content');
+    if (!content) return;
+    const myId = APP.user?.name;
+    const pm = DB.getPartnerName();
+    const td = today();
+    const allRecs = DB.getRecords();
+    let myRec = allRecs.find(r => r.user === myId && r.date === td) || {sweet:'', unsaid:''};
+    let partnerRec = allRecs.find(r => r.user === pm && r.date === td);
+    content.innerHTML = '';
+    content.append(
+      h('h1', null, '💌 今天想对' + pm + '说的话'),
+      h('p', {style:{color:'var(--tlight)',fontSize:'0.9rem',marginBottom:'16px'}}, '—— ' + fmt(new Date())),
+      h('div', {style:{marginBottom:'24px'}},
+        h('div', {style:{display:'flex',alignItems:'center',gap:'8px',fontSize:'1rem',fontWeight:600,marginBottom:'10px'}}, h('span', null, '🌸'), h('span', null, pm + '今天对我说的暖心话'), micBtn('rec-sweet')),
+        h('textarea', {className:'form-input',placeholder:'记录' + pm + '今天说的一句让你感动的话...',id:'rec-sweet',rows:4}, myRec.sweet || '')
+      ),
+      h('div', {style:{marginBottom:'24px'}},
+        h('div', {style:{display:'flex',alignItems:'center',gap:'8px',fontSize:'1rem',fontWeight:600,marginBottom:'10px'}}, h('span', null, '💭'), h('span', null, '今天没来得及对' + pm + '说的心里话'), micBtn('rec-unsaid')),
+        h('textarea', {className:'form-input',placeholder:pm + '今天太忙没时间听你说的话，写在这里吧...',id:'rec-unsaid',rows:6}, myRec.unsaid || '')
+      ),
+      h('div', {style:{marginBottom:'24px'}},
+      h('div', {style:{display:'flex',alignItems:'center',gap:'8px',fontSize:'1rem',fontWeight:600,marginBottom:'10px'}}, h('span', null, '😤'), h('span', null, '今天生气的事 / 吐槽'), micBtn('rec-anger')),
+      h('textarea', {className:'form-input',placeholder:'今天有什么不开心的事？想吐槽谁？写在这里发泄一下吧...',id:'rec-anger',rows:4}, myRec.anger || '')
+    ),
+    h('button', {className:'btn btn-p btn-block',style:{marginTop:'8px',marginBottom:'32px'},onClick:()=>{
+        const sweet = document.getElementById('rec-sweet').value.trim();
+        const unsaid = document.getElementById('rec-unsaid').value.trim();
+        const anger = document.getElementById('rec-anger').value.trim();
+
+        if (!sweet && !unsaid && !anger) { toast('写点什么再保存吧 💭'); return; }
+        DB.saveRecord({user:myId, date:td, sweet, unsaid, anger});
+        toast('💕 已记录，等TA来看～');
+      }}, '💾 保存记录'),
+      h('hr', {className:'divider'}),
+      h('h2', {style:{marginBottom:'12px'}}, '💬 ' + pm + '今天对我说的话'),
+      partnerRec ? h('div', {className:'card'},
+        partnerRec.sweet ? h('div', {style:{marginBottom:partnerRec.unsaid?'14px':'0'}},
+          h('div', {style:{fontSize:'0.85rem',fontWeight:600,color:'var(--tmuted)',marginBottom:'4px'}}, '🌸 TA对我的暖心话'),
+          h('p', {style:{lineHeight:'1.7',whiteSpace:'pre-wrap'}}, partnerRec.sweet)
+        ) : null,
+        partnerRec.anger ? h('div', {style:{marginTop:'12px'}},
+          h('div', {style:{fontSize:'0.85rem',fontWeight:600,color:'var(--tmuted)',marginBottom:'4px'}}, '😤 TA的吐槽'),
+          h('p', {style:{lineHeight:'1.7',whiteSpace:'pre-wrap'}}, partnerRec.anger)
+        ) : null,
+        partnerRec.unsaid ? h('div', null,
+          h('div', {style:{fontSize:'0.85rem',fontWeight:600,color:'var(--tmuted)',marginBottom:'4px'}}, '💭 TA没来得及说的话'),
+          h('p', {style:{lineHeight:'1.7',whiteSpace:'pre-wrap'}}, partnerRec.unsaid)
+        ) : null
+      ) : h('div', {style:{textAlign:'center',padding:'24px',color:'var(--tmuted)',background:'var(--card)',borderRadius:'10px',border:'1px dashed var(--plight)'}},
+        h('p', {style:{fontSize:'0.9rem'}}, pm + '今天还没有记录哦 💙'),
+        h('p', {style:{fontSize:'0.8rem',marginTop:'4px'}}, '等TA写完之后，你就能在这里看到了')
+      )
+    );
+  }
+  return { render };
+}
+
+// ---- Timeline Page ----
+function TimelinePage() {
+  let filter = 'all';
+  function render() {
+    const content = document.getElementById('page-content');
+    if (!content) return;
+    const myId = APP.user?.name;
+    const pm = DB.getPartnerName();
+    let recs = DB.getRecords();
+    if (filter === 'mine') recs = recs.filter(r => r.user === myId);
+    if (filter === 'partner') recs = recs.filter(r => r.user !== myId);
+    recs.sort((a,b) => b.date.localeCompare(a.date));
+    content.innerHTML = '';
+    content.append(
+      h('div', {className:'page-header'},
+        h('h1', null, '📖 恋爱记录'),
+        h('div', {style:{display:'flex',gap:'6px'}},
+          ['all','mine','partner'].map(f => h('button', {className:'btn btn-sm ' + (filter===f?'btn-p':'btn-s'),onClick:()=>{filter=f;render()}}, {all:'全部',mine:'我的',partner:pm+'的'}[f]))
+        )
+      ),
+      recs.length === 0 ? h('div', {className:'empty-state'},
+        h('div', {style:{fontSize:'3rem',marginBottom:'12px'}}, '📝'),
+        h('p', null, '还没有记录哦'),
+        h('p', {style:{fontSize:'0.85rem',marginTop:'4px'}}, '去首页记录你们的每一天吧 💕'),
+        h('button', {className:'btn btn-p',style:{marginTop:'16px'},onClick:()=>APP.navigate('record')}, '✍️ 写今天的记录')
+      ) : h('div', {className:'timeline'},
+        ...recs.map((r, i) => {
+          const isMe = r.user === myId;
+          const dotClass = r.user === '皮皮' ? 'pipi' : 'fan';
+          const showDate = i === 0 || r.date !== recs[i-1].date;
+          return h('div', {className:'timeline-item'},
+            h('div', {className:'timeline-dot ' + dotClass}),
+            showDate ? h('div', {style:{fontSize:'0.8rem',color:'var(--tmuted)',marginBottom:'6px',fontWeight:600}}, r.date === today() ? '今天 💕' : fmt(r.date)) : null,
+            h('div', {style:{display:'flex',alignItems:'center',gap:'10px',marginBottom:'6px'}},
+              h('span', {className:'timeline-name ' + dotClass}, isMe ? '我 (' + r.user + ')' : r.user),
+              h('span', {className:'timeline-date'}, r.date)
+            ),
+            h('div', {className:'timeline-content'},
+              r.sweet ? h('div', {className:'timeline-text'}, h('div', {className:'timeline-text-label'}, '🌸 暖心话'), h('p', {style:{whiteSpace:'pre-wrap'}}, r.sweet)) : null,
+              r.unsaid ? h('div', {className:'timeline-text'}, h('div', {className:'timeline-text-label'}, '💭 心里话'), h('p', {style:{whiteSpace:'pre-wrap'}}, r.unsaid)) : nul, r.anger ? h('div', {className:'timeline-text'}, h('div', {className:'timeline-text-label'}, '\u{1F624} \u5410\u69FD'), h('p', {style:{whiteSpace:'pre-wrap'}}, r.anger)) : nulll
+            )
+          );
+        })
+      )
+    );
+  }
+  return { render };
+}
+
+
+ function CalendarPage() {
+   let viewYear = new Date().getFullYear();
+   let viewMonth = new Date().getMonth();
+   function render() {
+     const content = document.getElementById('page-content');
+     if (!content) return;
+     content.innerHTML = '';
+     content.append(
+       h('div', {style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'16px'}},
+         h('button', {className:'btn btn-sm btn-s',onClick:()=>{viewMonth--;if(viewMonth<0){viewMonth=11;viewYear--;}render()}}, '← 上月'),
+         h('h2', {style:{margin:0}}, viewYear + '年' + (viewMonth+1) + '月'),
+         h('button', {className:'btn btn-sm btn-s',onClick:()=>{viewMonth++;if(viewMonth>11){viewMonth=0;viewYear++;}render()}}, '下月 →')
+       )
+     );
+     const dayNames = ['日','一','二','三','四','五','六'];
+     const grid = h('div', {style:{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:'2px',textAlign:'center'}});
+     dayNames.forEach(d => grid.append(h('div', {style:{fontWeight:600,fontSize:'0.85rem',color:'var(--tmuted)',padding:'6px 0'}}, d)));
+     const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+     const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+     const allRecords = DB.getRecords();
+     const td = today();
+     for (let i = 0; i < firstDay; i++) grid.append(h('div', null, ''));
+     for (let d = 1; d <= daysInMonth; d++) {
+       const ds = viewYear + '-' + String(viewMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+       const hr = allRecords.some(r => r.date === ds);
+       const it = ds === td;
+       const cell = h('div', {style:{padding:'8px 2px',borderRadius:'8px',cursor:'pointer',position:'relative',fontWeight:it?700:400,fontSize:'0.9rem',transition:'background 0.2s'},onClick:()=>showDay(ds)});
+       cell.innerText = String(d);
+       if (it) cell.style.background = 'var(--plitter)';
+       if (hr) cell.append(h('div', {style:{width:'5px',height:'5px',borderRadius:'50%',background:'var(--pdark)',margin:'1px auto 0'}}));
+       grid.append(cell);
+     }
+     content.append(grid);
+ 
+     // Today's records below calendar
+     content.append(h('div', {style:{marginTop:'20px'}}, h('h3', null, '📝 ' + fmt(td) + '的记录')));
+     const todayRecs = allRecords.filter(r => r.date === td);
+     if (todayRecs.length === 0) {
+       content.append(h('p', {style:{color:'var(--tmuted)',textAlign:'center',padding:'20px'}}, '今天还没有记录 💌'));
+       content.append(h('button', {className:'btn btn-p btn-block',onClick:()=>APP.navigate('record')}, '✍️ 去记录'));
+     } else {
+       todayRecs.forEach(r => {
+         content.append(h('div', {className:'card',style:{marginBottom:'10px'}},
+           h('div', {style:{display:'flex',alignItems:'center',gap:'8px',marginBottom:'6px'}},
+             h('div', {style:{width:'10px',height:'10px',borderRadius:'50%',background:r.user==='皮皮'?'var(--pipi)':'var(--fan)'}}),
+             h('span', {style:{fontWeight:600,fontSize:'0.9rem'}}, r.user)),
+           r.sweet ? h('div', {style:{marginBottom:'6px'}}, h('div', {style:{fontSize:'0.8rem',fontWeight:600,color:'var(--tmuted)'}}, '🌸 暖心话'), h('p', {style:{marginTop:'2px'}}, r.sweet)) : null,
+           r.unsaid ? h('div', null, h('div', {style:{fontSize:'0.8rem',fontWeight:600,color:'var(--tmuted)'}}, '💭 心里话'), h('p', {style:{marginTop:'2px'}}, r.unsaid)) : null
+         ));
+       });
+     }
+   }
+   function showDay(ds) {
+     const allRecords = DB.getRecords();
+     const dayRecs = allRecords.filter(r => r.date === ds);
+     const overlay = h('div', {style:{position:'fixed',top:0,left:0,right:0,bottom:0,background:'rgba(0,0,0,0.4)',zIndex:300,display:'flex',alignItems:'center',justifyContent:'center',padding:'20px'},onClick:e=>{if(e.target===overlay)overlay.remove()}});
+     const dialog = h('div', {style:{background:'var(--card)',borderRadius:'16px',padding:'24px',maxWidth:'400px',width:'100%',maxHeight:'80vh',overflow:'auto',boxShadow:'0 8px 32px rgba(0,0,0,0.15)'}});
+     dialog.append(h('h2', {style:{marginBottom:'16px',textAlign:'center'}}, fmt(ds)));
+     if (dayRecs.length === 0) {
+       dialog.append(h('p', {style:{color:'var(--tmuted)',textAlign:'center',padding:'20px 0'}}, '这一天还没有记录 📝'));
+       dialog.append(h('button', {className:'btn btn-p btn-block',onClick:()=>{overlay.remove();APP.navigate('record')}}, '✍️ 去记录'));
+     } else {
+       dayRecs.forEach(r => {
+         dialog.append(h('div', {style:{marginBottom:'16px'}},
+           h('div', {style:{display:'flex',alignItems:'center',gap:'8px',marginBottom:'6px'}},
+             h('div', {style:{width:'12px',height:'12px',borderRadius:'50%',background:r.user==='皮皮'?'var(--pipi)':'var(--fan)'}}),
+             h('span', {style:{fontWeight:600}}, (r.user===APP.user?.name?'我 ('+r.user+')':r.user))),
+           r.sweet ? h('div', {style:{marginBottom:'8px'}}, h('div', {style:{fontSize:'0.85rem',fontWeight:600,color:'var(--tmuted)'}}, '🌸 暖心话'), h('p', {style:{marginTop:'2px',whiteSpace:'pre-wrap'}}, r.sweet)) : null,
+           r.unsaid ? h('div', null, h('div', {style:{fontSize:'0.85rem',fontWeight:600,color:'var(--tmuted)'}}, '💭 心里话'), h('p', {style:{marginTop:'2px',whiteSpace:'pre-wrap'}}, r.unsaid)) : null
+         ));
+       });
+     }
+     dialog.append(h('button', {className:'btn btn-s btn-block',style:{marginTop:'12px'},onClick:()=>overlay.remove()}, '关闭'));
+     overlay.append(dialog);
+     document.body.appendChild(overlay);
+   }
+   return { render };
+ }
+ 
+
+
+ function FeedbackPage() {
+   function getWeekId() {
+     const d = new Date();
+     const s = new Date(d.getFullYear(),0,1);
+     const diff = d - s;
+     const w = Math.ceil((Math.floor(diff/86400000)+s.getDay()+1)/7);
+     return d.getFullYear()+'-W'+String(w).padStart(2,'0');
+   }
+   function render() {
+     const c = document.getElementById('page-content');
+     if (!c) return;
+     const wid = getWeekId();
+     const all = LS.get('weekly_feedback')||[];
+     const mn = APP.user?.name;
+     const pn = DB.getPartnerName();
+     const my = all.find(f=>f.user===mn&&f.week===wid);
+     const pt = all.find(f=>f.user===pn&&f.week===wid);
+     c.innerHTML = '';
+     c.append(
+       h('h1', null, '🗣 互相改进'),
+       h('p', {style:{color:'var(--tlight)',fontSize:'0.9rem',marginBottom:'16px'}}, '每周说出一个希望对方改进的地方，一起变得更好 💪'),
+       h('div', {className:'card'},
+         h('h3', null, '本周 ('+wid+')'),
+         h('div', {style:{marginTop:'12px'}},
+           h('div', {style:{fontSize:'0.9rem',fontWeight:600,color:'var(--tmuted)',marginBottom:'4px'}}, '我想对'+pn+'说：'),
+           my ? h('div', {style:{padding:'12px',background:'var(--bg)',borderRadius:'8px',marginBottom:'8px'}},h('p',null,my.feedback),h('div',{style:{fontSize:'0.8rem',color:'var(--tmuted)',marginTop:'4px'}},'已提交 ✅'))
+             : h('textarea', {className:'form-input',id:'fb-inp',placeholder:'写一个希望'+pn+'改进的地方...',rows:3}),
+           my ? null : h('button', {className:'btn btn-p btn-sm',style:{marginTop:'8px'},onClick:()=>{
+             const v = document.getElementById('fb-inp').value.trim();
+             if(!v){toast('写点什么再提交吧 💭');return;}
+             const a = LS.get('weekly_feedback')||[];
+             a.push({user:mn,week:wid,feedback:v,timestamp:new Date().toISOString()});
+             LS.set('weekly_feedback',a);
+             toast('✅ 已提交');
+             render();
+           }}, '提交')
+         ),
+         h('hr', {style:{margin:'16px 0',border:'none',height:'1px',background:'var(--plitter)'}}),
+         h('div',
+           h('div', {style:{fontSize:'0.9rem',fontWeight:600,color:'var(--tmuted)',marginBottom:'4px'}}, pn+'想对你说：'),
+           pt ? h('div', {style:{padding:'12px',background:'var(--plitter)',borderRadius:'8px'}},h('p',null,pt.feedback))
+             : h('p', {style:{color:'var(--tmuted)',fontSize:'0.9rem'}}, pn+'还没有提交本周的反馈 🤗')
+         )
+       ),
+       h('h2', {style:{marginTop:'20px',marginBottom:'12px'}}, '📋 历史记录'),
+       ...(()=>{
+         const weeks = [...new Set(all.map(f=>f.week))].sort().reverse().filter(w=>w!==wid);
+         if(weeks.length===0) return [h('p',{style:{color:'var(--tmuted)',textAlign:'center',padding:'20px'}},'还没有历史记录')];
+         return weeks.map(w => {
+           const wf = all.filter(f=>f.week===w);
+           return h('div', {className:'card',style:{marginBottom:'10px'}},
+             h('div', {style:{fontSize:'0.85rem',fontWeight:600,color:'var(--tmuted)',marginBottom:'8px'}}, w),
+             ...wf.map(f => h('div', {style:{marginBottom:'6px',display:'flex',alignItems:'flex-start',gap:'8px'}},
+               h('div', {style:{width:'10px',height:'10px',borderRadius:'50%',background:f.user==='皮皮'?'var(--pipi)':'var(--fan)',flexShrink:0,marginTop:'4px'}}),
+               h('div', null,
+                 h('div', {style:{fontWeight:600,fontSize:'0.85rem',color:f.user==='皮皮'?'var(--pipi)':'var(--fan)'}}, f.user),
+                 h('p', {style:{fontSize:'0.9rem',marginTop:'2px'}}, f.feedback)
+               )
+             ))
+           );
+         });
+       })()
+     );
+   }
+   return { render };
+ }
+ 
+
+// ============ Router ============
+const pages = {
+  setup: SetupPage,
+  login: LoginPage,
+  dashboard: DashboardPage,
+  dates: DatesPage,
+  record: RecordPage,
+  timeline: TimelinePage,
+  calendar: CalendarPage,
+  feedback: FeedbackPage,
+};
+
+function renderApp() {
+  const app = document.getElementById('app');
+  let page = APP.page;
+  const settingsDone = !!APP.settings;
+  const loggedIn = !!APP.user;
+
+  // Redirect logic
+  if (!settingsDone && page !== 'setup') { page = 'setup'; APP.page = 'setup'; }
+  if (settingsDone && !loggedIn && page === 'setup') { page = 'login'; APP.page = 'login'; }
+  if (loggedIn && page === 'login') { page = 'dashboard'; APP.page = 'dashboard'; }
+
+  app.innerHTML = '';
+  app.append(Navbar());
+  const main = h('div', {id:'page-content', className: page==='setup'||page==='login' ? '' : 'page' + (page==='timeline'||page==='calendar'||page==='feedback'?' page-wide':'')});
+  app.append(main);
+
+  const pg = pages[page];
+  if (pg) {
+    const inst = pg();
+    inst.render();
+  }
+}
+
+APP.on(renderApp);
+renderApp();
+
+
+function startVoice(id){var SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast('语音识别需要Chrome');return;}var r=new SR();r.lang='zh-CN';r.continuous=false;r.interimResults=false;r.onresult=function(e){document.getElementById(id).value=e.results[0][0].transcript;toast('✅ 完成');};r.onerror=function(){toast('语音识别失败');};r.start();toast('🎤 请说话...');}
+function micBtn(id){return h('span',{style:{display:'inline-flex',alignItems:'center',justifyContent:'center',width:'28px',height:'28px',borderRadius:'50%',background:'var(--plitter)',cursor:'pointer',marginLeft:'6px',fontSize:'14px',flexShrink:0},onClick:function(){startVoice(id)}},'🎤');}
+
+</script>
+</body>
+</html>
