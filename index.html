@@ -104,7 +104,7 @@ const h = (tag, attr, ...kids) => {
     else if (k === 'rows' || k === 'cols') el.setAttribute(k, v);
     else el.setAttribute(k, v);
   });
-  if (kids) (Array.isArray(kids) ? kids : [kids]).forEach(c => { if (c != null) el.append(typeof c === 'string' ? document.createTextNode(c) : c); });
+  (function addKids(arr){arr.forEach(function(c){if(c==null)return;if(Array.isArray(c))addKids(c);else el.append(typeof c==='string'?document.createTextNode(c):c);});})(kids||[]);
   return el;
 };
 
